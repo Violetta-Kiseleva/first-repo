@@ -1,2 +1,2 @@
-# first-repo
+# CMC project
 Computer graphics
