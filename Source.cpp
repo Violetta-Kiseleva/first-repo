@@ -1,7 +1,4 @@
 #include <iostream> 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 // GLEW
 #define GLEW_STATIC
@@ -11,7 +8,12 @@
 #include <GLFW/glfw3.h> 
 
 // SOIL
-#include <SOIL/SOIL.h>
+#include <SOIL/SOIL.h> 
+
+// GLM
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 // SHADER
 #include "Shader.h"
@@ -21,7 +23,12 @@
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
 // Window dimensions
-const GLuint WIDTH = 800, HEIGHT = 600;
+const GLuint WIDTH = 800, HEIGHT = 600; 
+
+// CAMERA 
+glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
 /////////////////////////////////////////////////////////////////        MAIN        ///////////////////////////////////////////
 int main()
@@ -77,18 +84,80 @@ int main()
     };
     */
 
-    // Устновка вершин (буфер) и указателей
+    // ПРЯМОУГОЛЬНИК
+    /*
     GLfloat vertices[] = {
         // Позиции              // Цвета           // Текстуры
          0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // правый верх
          0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // правый низ
         -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // левый низ
         -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // левый верх 
-    };
+    };*/
     GLuint indices[] = {  // Note that we start from 0!
         0, 1, 3, // первый треугольник
         1, 2, 3  // второй треугольник
     };
+
+    GLfloat vertices[] = {
+    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+     0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+    -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+    }; 
+
+    // умножим наш куб на 10 
+    glm::vec3 cubePositions[] = {
+        glm::vec3(0.0f,  0.0f,  0.0f),
+        glm::vec3(2.0f,  5.0f, -15.0f),
+        glm::vec3(-1.5f, -2.2f, -2.5f),
+        glm::vec3(-3.8f, -2.0f, -12.3f),
+        glm::vec3(2.4f, -0.4f, -3.5f),
+        glm::vec3(-1.7f,  3.0f, -7.5f),
+        glm::vec3(1.3f, -2.0f, -2.5f),
+        glm::vec3(1.5f,  2.0f, -2.5f),
+        glm::vec3(1.5f,  0.2f, -1.5f),
+        glm::vec3(-1.3f,  1.0f, -1.5f)
+    }; 
+    
+
+    
 
     GLuint VBO, VAO; 
     GLuint EBO;                     // прямоугольник
@@ -107,7 +176,7 @@ int main()
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     // Позиция атрибута
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
     glEnableVertexAttribArray(0);
 
     // Цвет атрибута
@@ -115,14 +184,14 @@ int main()
     glEnableVertexAttribArray(1); 
 
     // Текстура
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
     glEnableVertexAttribArray(2);
 
     glBindVertexArray(0);                           // отвязываем VAO 
 
     // загружаем и создаем текстуру
     GLuint texture1; 
-    GLuint texture2;
+    
     //// текстура первая
     glGenTextures(1, &texture1);
     glBindTexture(GL_TEXTURE_2D, texture1);          // все 2д операции влияют на этот объект
@@ -152,7 +221,7 @@ int main()
 
     // вторая текстура 
     // ===================
-    
+    GLuint texture2;
     glGenTextures(1, &texture2);
     glBindTexture(GL_TEXTURE_2D, texture2);
     // Set our texture parameters
@@ -183,25 +252,74 @@ int main()
 
         // очищаем буфер цвета
         glClearColor(0.9f, 0.3f, 0.2f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // привязка текстуры
         // glBindTexture(GL_TEXTURE_2D, texture); 
 
         // рисуем прямоугольник
-        file_Shader.Use();
+        
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture1);
         glUniform1i(glGetUniformLocation(file_Shader.Program, "ourTexture1"), 0);
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, texture2);
-        glUniform1i(glGetUniformLocation(file_Shader.Program, "ourTexture2"), 1);
+        glUniform1i(glGetUniformLocation(file_Shader.Program, "ourTexture2"), 1); 
 
+        file_Shader.Use(); 
+
+       
+        glEnable(GL_DEPTH_TEST);
+        // Трансформации
+        // для модельной матрицы (преобразовываем все вершины в глобальное мировое пространство)
+        //glm::mat4 model;
+        // второй аругмент: вращаем
+        //model = glm::rotate(model, (GLfloat)glfwGetTime() * 50.0f, glm::vec3(1.0f, 0.5f, 0.0f));
+
+        // матрица LookAt которая смотрит на объект
+        glm::mat4 view;
+        GLfloat radius = 20.0f;
+        GLfloat camX = sin(glfwGetTime()) * radius;
+        GLfloat camZ = cos(glfwGetTime()) * radius;
+        view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+        
+        // для матрицы вида (сдвигаем сцену назад)
+        /*glm::mat4 view; 
+        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f)); */
+
+        // матрица проекции (используем перспективную проекцию)
+        glm::mat4 projection;
+        projection = glm::perspective(45.0f, (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
+
+        // Отправляем матрицы в шейдер
+        GLint modelLoc = glGetUniformLocation(file_Shader.Program, "model");
+        //glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model)); 
+
+        GLint viewLoc = glGetUniformLocation(file_Shader.Program, "view");
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view)); 
+
+        GLint projectionLoc = glGetUniformLocation(file_Shader.Program, "projection");
+        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
         glBindVertexArray(VAO);  
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+       // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
       //  glDrawArrays(GL_TRIANGLES, 0, 3);   // треугольник
+        //glDrawArrays(GL_TRIANGLES, 0, 36);      // один куб
+
+        
+        
+        // много кубов!!! :3 
+        for (GLuint i = 0; i < 10; i++)
+        {
+            glm::mat4 model;
+            model = glm::translate(model, cubePositions[i]);
+            GLfloat angle = 20.0f * i;
+            model = glm::rotate(model, angle, glm::vec3(1.0f, 0.3f, 0.5f));
+            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
         glBindVertexArray(0);
 
         // Меняем местами буфера экрана
@@ -221,4 +339,13 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
+    GLfloat cameraSpeed = 0.05f;
+    if (key == GLFW_KEY_W)
+        cameraPos += cameraSpeed * cameraFront;
+    if (key == GLFW_KEY_S)
+        cameraPos -= cameraSpeed * cameraFront;
+    if (key == GLFW_KEY_A)
+        cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+    if (key == GLFW_KEY_D)
+        cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
 }
