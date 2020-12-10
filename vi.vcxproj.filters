@@ -18,12 +18,18 @@
     <ClCompile Include="Source.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="glad.c">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GL\GLFW\include\stb_image\stb_image.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
   </ItemGroup>

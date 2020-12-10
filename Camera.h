@@ -3,9 +3,10 @@
 #include <vector>
 
 // библиотеки
-#include <GLFW/glew.h>
+#include <GLAD/include/glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 // опции для движения камеры
 enum Camera_Movement {
@@ -19,7 +20,7 @@ enum Camera_Movement {
 const GLfloat YAW        = -90.0f;	// поворот влево-вправо
 const GLfloat PITCH      =  0.0f;	// наклон верх-вниз
 const GLfloat SPEED      =  3.0f;	// скорость перемещения
-const GLfloat SENSITIVTY =  0.25f;	// чувст-ть мышки
+const GLfloat SENSITIVTY =  0.05f;	// чувст-ть мышки
 const GLfloat ZOOM       =  45.0f;	// max значение отдаления (колесико)
 
 
