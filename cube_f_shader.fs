@@ -25,25 +25,19 @@ struct Light {
     //float cutOff;
     //float outerCutOff;
 };
-
-uniform Light light; 
-uniform Material material;
-uniform vec3 viewPos;		// положение камер
-
+        
 in vec3 FragPos;
 in vec3 Normal;
 in vec2 TexCoords;
-
-
+       
+uniform Light light; 
+uniform Material material;
+uniform vec3 viewPos;		// положение камер
+        
+       
 // uniform vec3 objectColor;	// цвет объекта
 // uniform vec3 lightColor = vec3(1.0)	// цвет источника света (чтобы не засвечивался)
 // uniform vec3 lightPos; 
- 
-
-
-
-//uniform sampler2D ourTexture1;
-//uniform sampler2D ourTexture2;
 
 void main()
 {    
