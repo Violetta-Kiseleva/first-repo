@@ -1,4 +1,4 @@
-# CMC MSU project
+# Computer graphics
 Computer graphics
 
 Реализованные эффекты в программе: 
